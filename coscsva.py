@@ -6,11 +6,17 @@ import re, math
 import sys
 import time
 
-start_time = time.time()
+#calculation of real time - impacted by other tasks run by CPU
+start_time = time.time() 
+
+#compile regex pattern for one or more alphanumeric characters
 word = re.compile(r'\w+')
+
+#read csv file into dataframe where t denotes tab separated file and parser engine of type python
 data = pd.read_csv('na100.tsv', header=None, sep='\t', engine='python')
 
-def get_cosine(vec1, vec2): #calculation for cosine similarity
+#calculation for cosine similarity
+def get_cosine(vec1, vec2):
     intersection = set(vec1.keys()) & set(vec2.keys())
     numerator = sum([vec1[x] * vec2[x] for x in intersection])
     
@@ -23,10 +29,12 @@ def get_cosine(vec1, vec2): #calculation for cosine similarity
     else:
         return float(numerator) / denominator
 
+#conversion of text to vectors
 def text_to_vector(text):
     words = word.findall(text)
     return Counter(words)
 
+#Unicode text, go through each row and output to csv as similarity score between 0 & 1
 def main():
     ids = {}
     rows = data
