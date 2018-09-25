@@ -1,21 +1,23 @@
-#!/usr/bin/env python
+# Cosine Similarity Rating
+
+# Importing the libraries
 import numpy as np
 import pandas as pd
-from collections import Counter
 import re, math
 import sys
 import time
+from collections import Counter
 
-#calculation of real time - impacted by other tasks run by CPU
+# Needed to calculate time it will take to run the task - impacted by other tasks run by CPU
 start_time = time.time() 
 
-#compile regex pattern for one or more alphanumeric characters
+# Compile regex pattern for one or more alphanumeric characters
 word = re.compile(r'\w+')
 
-#read csv file into dataframe where t denotes tab separated file and parser engine of type python
-data = pd.read_csv('na100.tsv', header=None, sep='\t', engine='python')
+# Read csv file into dataframe where \t denotes tab separation and parser engine of type python
+data = pd.read_csv('data/news_articles.tsv', header=None, sep='\t', engine='python')
 
-#calculation for cosine similarity
+# Calculation for cosine similarity
 def get_cosine(vec1, vec2):
     intersection = set(vec1.keys()) & set(vec2.keys())
     numerator = sum([vec1[x] * vec2[x] for x in intersection])
@@ -29,12 +31,12 @@ def get_cosine(vec1, vec2):
     else:
         return float(numerator) / denominator
 
-#conversion of text to vectors
+# Conversion of text to vectors
 def text_to_vector(text):
     words = word.findall(text)
     return Counter(words)
 
-#Unicode text, go through each row and output to csv as similarity score between 0 & 1
+# Unicode text, go through each row and output to csv as similarity score between 0 & 1
 def main():
     ids = {}
     rows = data
@@ -42,7 +44,7 @@ def main():
     
     for row in data.values:
         id = row[0]
-        text = row[3]
+        text = row[2]
         ids[id] = "".join(text)
         
     for x,v1 in ids.items():
